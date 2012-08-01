@@ -29,7 +29,7 @@ import time
 
 from ssh.common import *
 from ssh import util
-from ssh.ssh_exception import SSHException
+from ssh.ssh_exception import SSHException, BadProxyCommand
 from ssh.message import Message
 
 
@@ -254,6 +254,8 @@ class Packetizer (object):
                     pass
                 else:
                     n = -1
+            except BadProxyCommand:
+                raise
             except Exception:
                 # could be: (32, 'Broken pipe')
                 n = -1

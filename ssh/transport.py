@@ -44,7 +44,9 @@ from ssh.primes import ModulusPack
 from ssh.rsakey import RSAKey
 from ssh.server import ServerInterface
 from ssh.sftp_client import SFTPClient
-from ssh.ssh_exception import SSHException, BadAuthenticationType, ChannelException
+from ssh.ssh_exception import SSHException, BadAuthenticationType, \
+    ChannelException, BadProxyCommand
+
 
 from Crypto import Random
 from Crypto.Cipher import Blowfish, AES, DES3, ARC4
@@ -1657,6 +1659,8 @@ class Transport (threading.Thread):
                 timeout = 2
             try:
                 buf = self.packetizer.readline(timeout)
+            except BadProxyCommand:
+                raise
             except Exception, x:
                 raise SSHException('Error reading SSH protocol banner' + str(x))
             if buf[:4] == 'SSH-':
